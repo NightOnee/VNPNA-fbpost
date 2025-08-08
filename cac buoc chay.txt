@@ -1,0 +1,11 @@
+1. cài đặt streamlit 
+	pip install streamlit google-generativeai python-dotenv
+2. trỏ về thư mục
+- máy ở nhà: 
+	cd /d E:\OneDrive\Project\chatbot
+	
+- máy ở cơ quan
+	cd /d D:\OneDrive\Project\chatbot
+	
+3. chạy lệnh chạy chatbot
+	python -m streamlit run vietnam_post_bot.py

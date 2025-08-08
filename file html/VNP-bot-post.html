@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-85N4WR4EB7"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-85N4WR4EB7');
+	</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📮 Trợ lý Sáng tạo Nội dung Vietnam Post</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- **UPDATED**: Load API Key from the external config.js file -->
+    <!-- This file MUST be in the same directory as this HTML file. -->
+    <script src="config.js"></script>
+
+    <style>
+        /* Custom styles to enhance Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc; /* gray-100 */
+        }
+        .container-card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            padding: 1.5rem; /* p-6 */
+        }
+        .btn-primary {
+            background-color: #2563eb; /* blue-600 */
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8; /* blue-700 */
+        }
+        .btn-primary:disabled {
+            background-color: #9ca3af; /* gray-400 */
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #1f2937; /* gray-800 */
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb; /* blue-600 */
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        .result-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f9fafb; /* gray-50 */
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            line-height: 1.6;
+            color: #111827; /* gray-900 */
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">📮 Trợ lý Sáng tạo Nội dung Vietnam Post</h1>
+            <p class="mt-2 text-lg text-gray-600">Chỉ cần điền 3 thông tin dưới đây, AI sẽ giúp bạn tạo ra một bài viết Facebook hoàn chỉnh!</p>
+        </header>
+
+        <!-- Alert Box -->
+        <div id="alert-box" class="mb-6"></div>
+
+        <!-- Input Form -->
+        <div class="container-card mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6 border-b pb-3">1. Cung cấp thông tin cần thiết</h2>
+            <div class="space-y-6">
+                <!-- **REMOVED**: API Key input field is no longer needed -->
+                <div>
+                    <label for="san-pham-input" class="block text-md font-medium text-gray-700 mb-2">Sản phẩm/Dịch vụ cốt lõi:</label>
+                    <input type="text" id="san-pham-input" class="form-input" placeholder="Ví dụ: Bảo hiểm xe máy PTI, Chuyển phát nhanh EMS...">
+                </div>
+                <div>
+                    <label for="diem-nhan-input" class="block text-md font-medium text-gray-700 mb-2">Các điểm nhấn hoặc thông tin quan trọng khác: <span class="text-gray-500 font-normal">(Không bắt buộc)</span></label>
+                    <textarea id="diem-nhan-input" class="form-textarea" rows="4" placeholder="Ví dụ: Chương trình giảm giá 20%, Miễn phí tạo tài khoản..."></textarea>
+                </div>
+                <div>
+                    <label for="lien-he-input" class="block text-md font-medium text-gray-700 mb-2">Thông tin liên hệ:</label>
+                    <input type="text" id="lien-he-input" class="form-input" placeholder="Ví dụ: 0988.888.888 - Nguyễn Văn A - Bưu cục ABC">
+                </div>
+            </div>
+            <div class="mt-8">
+                <button id="generate-btn" class="w-full btn-primary flex items-center justify-center space-x-2">
+                    <span>Tạo bài viết ✨</span>
+                </button>
+                <div id="spinner" class="hidden text-center mt-4 text-gray-600 font-medium">
+                    <svg class="animate-spin h-5 w-5 text-blue-600 inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Chuyên gia đang sáng tạo, vui lòng chờ trong giây lát... ✍️
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-container" class="hidden container-card">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-3">2. Kết quả</h2>
+            <div id="result-display" class="result-content mb-6"></div>
+            
+            <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-3">3. Thao tác</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <button id="copy-btn" class="w-full btn-secondary flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Sao chép</span>
+                </button>
+                <button id="regenerate-btn" class="w-full btn-secondary flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <span>Tạo lại</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SECTION 1: CONFIGURATION AND DATA ---
+
+        const MUC_DICH_OPTIONS = {
+            1: "Giới thiệu và làm rõ lợi ích của dịch vụ cho khách hàng chưa biết.",
+            2: "Tăng cường tương tác (like, comment, share) và xây dựng cộng đồng.",
+            3: "Kêu gọi hành động cụ thể (ví dụ: tải app, đến bưu cục gần nhất, đăng ký dịch vụ).",
+            4: "Xây dựng hình ảnh thương hiệu Bưu điện gần gũi, đáng tin cậy.",
+            5: "Chia sẻ câu chuyện thành công của khách hàng (case study/testimonial) để tăng uy tín.",
+            6: "Giải đáp thắc mắc thường gặp và cung cấp các mẹo hữu ích cho khách hàng.",
+        };
+
+        const GIONG_VAN_OPTIONS = {
+            1: "Chuyên nghiệp & Đáng tin cậy: Nhấn mạnh vào sự an toàn, quy trình rõ ràng, minh bạch.",
+            2: "Thân thiện & Gần gũi: Dùng ngôn từ đơn giản, dễ hiểu, như một người bạn.",
+            3: "Vui vẻ & Bắt trend: Sử dụng các từ ngữ, cấu trúc câu đang thịnh hành.",
+            4: "Truyền cảm hứng & Kể chuyện: Chia sẻ một câu chuyện ý nghĩa.",
+            5: "Đồng cảm & Thấu hiểu: Tập trung vào việc giải quyết các nỗi lo của khách hàng.",
+            6: "Chia sẻ kiến thức & Hướng dẫn: Cung cấp thông tin hữu ích, mẹo vặt.",
+        };
+
+        const MASTER_PROMPT_TEMPLATE = `
+# BỐI CẢNH VÀ VAI TRÒ
+BẠN LÀ: Một chuyên gia sáng tạo nội dung Social Media, am hiểu sâu sắc về thị trường Việt Nam và có chuyên môn về các sản phẩm, dịch vụ của Bưu điện Việt Nam (Vietnam Post).
+MỤC TIÊU CỦA BẠN: Giúp tôi, một nhân viên Bưu điện, tạo ra một bài viết đăng trên Facebook thật hấp dẫn, chuyên nghiệp và hiệu quả dựa trên các thông tin tôi cung cấp dưới đây.
+
+# THÔNG TIN CHI TIẾT VỀ BÀI VIẾT
+Dưới đây là các thông tin cần thiết, hãy dựa vào đây để tạo bài viết:
+
+**1. Sản phẩm/Dịch vụ cốt lõi:**
+{san_pham}
+
+**2. Mục đích chính của bài viết:**
+{muc_dich}
+
+**3. Giọng văn mong muốn:**
+{giong_van}
+
+**4. Các điểm nhấn hoặc thông tin quan trọng khác:**
+{diem_nhan}
+
+# YÊU CẦU VỀ ĐỊNH DẠNG ĐẦU RA
+- **Kết quả cuối cùng:** Phải là MỘT bài viết hoàn chỉnh, liền mạch, sẵn sàng để sao chép và đăng trực tiếp lên Facebook.
+- **Cấu trúc:** Bài viết phải có 3 phần rõ ràng:
+    1.  **Câu Mở Đầu (Hook):** Phải thật ấn tượng, thu hút sự chú ý trong 3 giây đầu tiên (có thể là câu hỏi, một sự thật gây ngạc nhiên, hoặc một vấn đề mà khách hàng đang gặp).
+    2.  **Nội dung chính:** Diễn giải các lợi ích một cách rõ ràng, dễ hiểu. Sử dụng icon (biểu tượng cảm xúc) một cách tinh tế để tăng tính sinh động và phân tách các ý. Có thể dùng gạch đầu dòng/đánh số để liệt kê.
+    3.  **Kêu Gọi Hành Động (Call-to-Action):** Phải thật rõ ràng và thôi thúc.
+- **TUYỆT ĐỐI KHÔNG** được chứa các tiêu đề phân mục như "Câu Mở Đầu (Hook):", "Nội dung chính:", "Kêu gọi hành động:".
+- **Hashtag:** **BẮT BUỘC** có hashtag #VNP, đề xuất thêm 3-4 hashtag phù hợp, bao gồm hashtag thương hiệu, hashtag dịch vụ và hashtag xu hướng (nếu có).
+- **BẮT BUỘC** trong phần "3. **Kêu Gọi Hành Động (Call-to-Action):**" phải kết hợp thêm thông tin liên hệ sau: {thong_tin_lien_he}
+`;
+
+        // --- SECTION 2: DOM ELEMENTS AND LOGIC ---
+
+        // Get DOM elements
+        const generateBtn = document.getElementById('generate-btn');
+        const regenerateBtn = document.getElementById('regenerate-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const sanPhamInput = document.getElementById('san-pham-input');
+        const diemNhanInput = document.getElementById('diem-nhan-input');
+        const lienHeInput = document.getElementById('lien-he-input');
+        const spinner = document.getElementById('spinner');
+        const alertBox = document.getElementById('alert-box');
+        const resultsContainer = document.getElementById('results-container');
+        const resultDisplay = document.getElementById('result-display');
+        
+        let generatedText = "";
+
+        // Attach event listeners
+        generateBtn.addEventListener('click', handleGeneratePost);
+        regenerateBtn.addEventListener('click', handleGeneratePost);
+        copyBtn.addEventListener('click', copyToClipboard);
+
+        /**
+         * Main function to handle post generation
+         */
+        async function handleGeneratePost() {
+            // **UPDATED**: Get API Key from the global variable defined in config.js
+            const apiKey = window.API_KEY; 
+            
+            // Get other values from input fields
+            const sanPham = sanPhamInput.value.trim();
+            const diemNhan = diemNhanInput.value.trim();
+            const lienHe = lienHeInput.value.trim();
+
+            // **UPDATED**: Validate the API Key from config.js
+            if (typeof apiKey === 'undefined' || !apiKey || apiKey === "YOUR_API_KEY_HERE") {
+                showAlert("Không tìm thấy API Key hoặc API Key không hợp lệ. Vui lòng kiểm tra lại file `config.js` của bạn.", "error");
+                return;
+            }
+            if (!sanPham || !lienHe) {
+                showAlert("Vui lòng điền đầy đủ thông tin 'Sản phẩm/Dịch vụ' và 'Thông tin liên hệ'.", "warning");
+                return;
+            }
+
+            // Show spinner and disable buttons
+            setLoadingState(true);
+
+            try {
+                // Randomly select purpose and tone
+                const randomMucDich = getRandomValue(MUC_DICH_OPTIONS);
+                const randomGiongVan = getRandomValue(GIONG_VAN_OPTIONS);
+
+                // Format the final prompt
+                let finalPrompt = MASTER_PROMPT_TEMPLATE
+                    .replace('{san_pham}', sanPham)
+                    .replace('{muc_dich}', randomMucDich)
+                    .replace('{giong_van}', randomGiongVan)
+                    .replace('{diem_nhan}', diemNhan || "Không có")
+                    .replace('{thong_tin_lien_he}', lienHe);
+
+                // Prepare the API call
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: finalPrompt }] }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `Lỗi HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                    generatedText = data.candidates[0].content.parts[0].text;
+                    displayResults(generatedText);
+                } else {
+                    let safetyMessage = "Không nhận được nội dung từ AI. Lý do có thể là prompt của bạn đã vi phạm chính sách an toàn.";
+                    if (data.promptFeedback && data.promptFeedback.blockReason) {
+                        safetyMessage += ` (Lý do: ${data.promptFeedback.blockReason})`;
+                    }
+                    throw new Error(safetyMessage);
+                }
+
+            } catch (error) {
+                showAlert(`Đã có lỗi xảy ra khi tạo bài viết: ${error.message}`, "error");
+                resultsContainer.classList.add('hidden');
+            } finally {
+                // Hide spinner and re-enable buttons
+                setLoadingState(false);
+            }
+        }
+        
+        /**
+         * Displays the generated results on the page
+         * @param {string} text The text to display
+         */
+        function displayResults(text) {
+            resultDisplay.textContent = text;
+            resultsContainer.classList.remove('hidden');
+            // Scroll to the results for better UX
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Shows an alert message to the user
+         * @param {string} message The message to show
+         * @param {'warning' | 'error' | 'success'} type The type of alert
+         */
+        function showAlert(message, type = 'warning') {
+            const alertColors = {
+                warning: 'bg-yellow-100 border-yellow-400 text-yellow-800',
+                error: 'bg-red-100 border-red-400 text-red-800',
+                success: 'bg-green-100 border-green-400 text-green-800'
+            };
+            alertBox.innerHTML = `<div class="p-4 border-l-4 ${alertColors[type]}" role="alert">
+                <p class="font-bold">${type.charAt(0).toUpperCase() + type.slice(1)}</p>
+                <p>${message}</p>
+            </div>`;
+        }
+        
+        /**
+         * Toggles the loading state of the UI
+         * @param {boolean} isLoading Whether the app is loading
+         */
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                spinner.classList.remove('hidden');
+                alertBox.innerHTML = '';
+                generateBtn.disabled = true;
+                regenerateBtn.disabled = true;
+            } else {
+                spinner.classList.add('hidden');
+                generateBtn.disabled = false;
+                regenerateBtn.disabled = false;
+            }
+        }
+
+        /**
+         * Gets a random value from an object
+         * @param {object} obj The object to get a random value from
+         */
+        function getRandomValue(obj) {
+            const values = Object.values(obj);
+            const randomIndex = Math.floor(Math.random() * values.length);
+            return values[randomIndex];
+        }
+        
+        /**
+         * Copies the generated text to the clipboard
+         */
+        function copyToClipboard() {
+            if (!generatedText) return;
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(generatedText).then(() => {
+                    const originalText = copyBtn.querySelector('span').textContent;
+                    copyBtn.querySelector('span').textContent = '✅ Đã sao chép!';
+                    setTimeout(() => {
+                        copyBtn.querySelector('span').textContent = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    showAlert('Không thể sao chép tự động. Vui lòng sao chép thủ công.', 'error');
+                });
+            } else {
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = generatedText;
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    const originalText = copyBtn.querySelector('span').textContent;
+                    copyBtn.querySelector('span').textContent = '✅ Đã sao chép!';
+                    setTimeout(() => {
+                        copyBtn.querySelector('span').textContent = originalText;
+                    }, 2000);
+                } catch (err) {
+                     showAlert('Không thể sao chép. Trình duyệt của bạn không được hỗ trợ.', 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
