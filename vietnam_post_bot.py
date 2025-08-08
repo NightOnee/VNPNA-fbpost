@@ -8,17 +8,31 @@ from dotenv import load_dotenv
 
 # --- PHẦN 1: CẤU HÌNH VÀ CHUẨN BỊ DỮ LIỆU ---
 
-# Tải API key từ file .env
+# Tải các biến môi trường từ file .env
 load_dotenv()
-GEMMA_API_KEY = os.getenv("GEMMA_API_KEY")
 
-# Cấu hình API key của Google
+# Tìm và tải tất cả các API key có trong file .env hoặc Streamlit Secrets
+# Các key cần được đặt tên là GEMMA_API_KEY_1, GEMMA_API_KEY_2, v.v.
+api_keys = [
+    os.getenv(key) for key in os.environ if key.startswith("GEMMA_API_KEY_")
+]
+
+# Kiểm tra xem có tìm thấy key nào không
+if not api_keys:
+    st.error("LỖI: Không tìm thấy API key nào có dạng 'GEMMA_API_KEY_...' trong file .env hoặc cấu hình Secrets của bạn.")
+    st.info("Ví dụ cách đặt key trong file .env:\nGEMMA_API_KEY_1='your_first_key'\nGEMMA_API_KEY_2='your_second_key'")
+    st.stop()
+
+
+# Cấu hình mô hình (sẽ cấu hình lại với key ngẫu nhiên trong mỗi lần gọi)
 try:
-    genai.configure(api_key=GEMMA_API_KEY)
+    # Cấu hình ban đầu với key đầu tiên chỉ để khởi tạo đối tượng model
+    genai.configure(api_key=api_keys[0])
     model = genai.GenerativeModel('models/gemma-3-27b-it')
 except (ValueError, TypeError) as e:
-    st.error("LỖI: Không tìm thấy hoặc API Key không hợp lệ. Vui lòng kiểm tra file .env của bạn.")
+    st.error(f"LỖI: API Key đầu tiên không hợp lệ. Lỗi: {e}")
     st.stop()
+
 
 # Lưu trữ các tùy chọn
 MUC_DICH_OPTIONS = {
@@ -67,7 +81,7 @@ Dưới đây là các thông tin cần thiết, hãy dựa vào đây để t�
     2.  **Nội dung chính:** Diễn giải các lợi ích một cách rõ ràng, dễ hiểu. Sử dụng icon (biểu tượng cảm xúc) một cách tinh tế để tăng tính sinh động và phân tách các ý. Có thể dùng gạch đầu dòng/đánh số để liệt kê.
     3.  **Kêu Gọi Hành Động (Call-to-Action):** Phải thật rõ ràng và thôi thúc.
 - **TUYỆT ĐỐI KHÔNG** được chứa các tiêu đề phân mục như "Câu Mở Đầu (Hook):", "Nội dung chính:", "Kêu gọi hành động:".
-- **Hashtag:** **BẮT BUỘC** có hashtag #VNP, đề xuất thêm 3-4 hashtag phù hợp, bao gồm hashtag thương hiệu, hashtag dịch vụ và hashtag xu hướng (nếu có).
+- **Hashtag:** **BẮT BUỘC** có hashtag #VNPNA, đề xuất thêm 3-4 hashtag phù hợp, bao gồm hashtag thương hiệu, hashtag dịch vụ và hashtag xu hướng (nếu có).
 - **BẮT BUỘC** trong phần "3. **Kêu Gọi Hành Động (Call-to-Action):**" phải kết hợp thêm thông tin liên hệ sau: {thong_tin_lien_he}
 """
 
